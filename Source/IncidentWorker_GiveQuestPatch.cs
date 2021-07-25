@@ -11,6 +11,65 @@ using System.Reflection;
 
 namespace NoQuestsWithoutComms
 {
+    [HarmonyPatch(typeof(IncidentWorker_GiveQuest))]
+    [HarmonyPatch("CanFireNowSub")]
+    [HarmonyPatch(new Type[] { typeof(IncidentParms)})]
+    class IncidentWorker_GiveQuest_CanFireNowSub {
+        public static bool Prefix(ref bool __result, IncidentWorker_GiveQuest __instance) {
+//            Log.Message("IncidentWorker_GiveQuest_CanFireNowSub " + __instance.def.defName, true);
+
+            TimeSpan interval = DateTime.Now - PatchMain.lastCheckComms;
+            if (interval.TotalSeconds >= 2f) {
+//                Log.Message("IncidentWorker_GiveQuest_CanFireNowSub Got in", true);
+                bool tmpResult = false;
+
+                List<Map> maps = Find.Maps;
+                for (int i = 0; i < maps.Count; i++) {
+                    if (CommsConsoleUtility.PlayerHasPoweredCommsConsole(maps[i])) {
+                        tmpResult = true;
+                        break;
+                    }
+                }
+
+                if (!tmpResult && PatchMain.hasTribalSignalfire) {
+                    for (int i = 0; i < maps.Count && !tmpResult; i++) {
+                        foreach (Building building in maps[i].listerBuildings.AllBuildingsColonistOfDef(ThingDef.Named("SignalFire"))) {
+                            if (building.Faction == Faction.OfPlayer) {
+                                CompGlower compGlower = building.TryGetComp<CompGlower>();
+                                if (compGlower.Glows) {
+                                    tmpResult = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (!tmpResult && PatchMain.hasNopowerCommsSimplified) {
+                    for (int i = 0; i < maps.Count && !tmpResult; i++) {
+                        foreach (Building building in maps[i].listerBuildings.AllBuildingsColonistOfDef(ThingDef.Named("BirdPostMessageTable"))) {
+                            if(building.Faction == Faction.OfPlayer) {
+                                CompPowerTrader compPowerTrader = building.TryGetComp<CompPowerTrader>();
+                                if (compPowerTrader == null || compPowerTrader.PowerOn) {
+                                    tmpResult = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                PatchMain.lastCheckComms = DateTime.Now;
+                if (tmpResult) {
+                    __result = tmpResult;
+                }
+                PatchMain.cachedResult = tmpResult;
+            }
+
+            return PatchMain.cachedResult;
+        }
+    }
+/*
     public class NoQuestsWithoutComms_Patch
     {
         [HarmonyPatch(typeof(IncidentWorker_GiveQuest), "CanFireNowSub")]
@@ -68,7 +127,7 @@ namespace NoQuestsWithoutComms
         [HarmonyPatch(typeof(StorytellerComp_SingleOnceFixed), "MakeIntervalIncidents")]
         public class Patch2
         {
-            static IEnumerable<FiringIncident> NQWC_Postfix(IEnumerable<FiringIncident> lateIncident, IIncidentTarget target, StorytellerComp_SingleOnceFixed __instance)
+            static IEnumerable<FiringIncident> NQWC_Postfix(IIncidentTarget target, StorytellerComp_SingleOnceFixed __instance)
             {
                 int num = Find.TickManager.TicksGame / 1000;
                 StorytellerCompProperties_SingleOnceFixed newProps = (StorytellerCompProperties_SingleOnceFixed)__instance.props;
@@ -110,15 +169,9 @@ namespace NoQuestsWithoutComms
                     }
                 }
                 yield break;
-              
             }
         }
-
     }
-
+*/
 }
-
-
-
-
 	
