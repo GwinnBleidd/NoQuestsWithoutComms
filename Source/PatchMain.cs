@@ -12,6 +12,8 @@ namespace NoQuestsWithoutComms
     {
         static public bool hasTribalSignalfire = false;
         static public bool hasNopowerCommsSimplified = false;
+        static public bool hasIndustrialAge = false; 
+
         static public DateTime lastCheckComms = DateTime.Now;
         static public bool cachedResult = false;
 
@@ -19,6 +21,7 @@ namespace NoQuestsWithoutComms
 
             hasTribalSignalfire = ModsConfig.ActiveModsInLoadOrder.Any(m => m.Name == "Tribal Signal Fire (Continued)" || m.PackageId == "Mlie.TribalSignalFire");
             hasNopowerCommsSimplified = ModsConfig.ActiveModsInLoadOrder.Any(m => m.Name == "Nopower Comms Simplified");
+            hasIndustrialAge = ModsConfig.ActiveModsInLoadOrder.Any(m => m.Name == "Industrial Age - Objects and Furniture (Continued)" || m.PackageId == "Mlie.CallofCthulhuIndustrialAge");
 
 			var harmony = new Harmony("eBae.NoQuestsWithoutComms");
 			var assembly = Assembly.GetExecutingAssembly();

@@ -27,7 +27,7 @@ namespace NoQuestsWithoutComms
         {
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(inRect);
-            listingStandard.CheckboxLabeled("allowVFEMTournamentsExplanation", ref settings.allowVFEMTournaments, "allowVFEMTournamentsToolTip");
+            listingStandard.CheckboxLabeled("allowVFEMTournamentsExplanation".Translate(), ref settings.allowVFEMTournaments);
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);
         }

@@ -45,6 +45,35 @@ namespace NoQuestsWithoutComms
                     }
                 }
 
+                if (!tmpResult && PatchMain.hasIndustrialAge) {
+                    for (int i = 0; i < maps.Count && !tmpResult; i++) {
+/*
+                        foreach (Building building in maps[i].listerBuildings.AllBuildingsColonistOfDef(ThingDef.Named("Estate_Telegraph"))) {
+                            if (building.Faction == Faction.OfPlayer) {
+                                CompPowerTrader compPowerTrader = building.TryGetComp<CompPowerTrader>();
+                                if (compPowerTrader == null || compPowerTrader.PowerOn) {
+//                                    Log.Message("IncidentWorker_GiveQuest_CanFireNowSub Estate_Telegraph", true);
+                                    tmpResult = true;
+                                    break;
+                                }
+                            }
+                        }
+*/
+                        if (!tmpResult) {
+                            foreach (Building building in maps[i].listerBuildings.AllBuildingsColonistOfDef(ThingDef.Named("Estate_Radio"))) {
+                                if (building.Faction == Faction.OfPlayer) {
+                                    CompPowerTrader compPowerTrader = building.TryGetComp<CompPowerTrader>();
+                                    if (compPowerTrader == null || compPowerTrader.PowerOn) {
+//                                        Log.Message("IncidentWorker_GiveQuest_CanFireNowSub Estate_Radio", true);
+                                        tmpResult = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (!tmpResult && PatchMain.hasNopowerCommsSimplified) {
                     for (int i = 0; i < maps.Count && !tmpResult; i++) {
                         foreach (Building building in maps[i].listerBuildings.AllBuildingsColonistOfDef(ThingDef.Named("BirdPostMessageTable"))) {
