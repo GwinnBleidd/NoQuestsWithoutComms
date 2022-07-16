@@ -5,8 +5,6 @@ using Verse;
 namespace NoQuestsWithoutComms {
 	static class D {
 
-		private static bool verbose = false;
-
 		public static void Text(string line, int depth = 0) {
 			Log.Message(line);
 		}

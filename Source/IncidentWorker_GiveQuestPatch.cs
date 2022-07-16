@@ -76,6 +76,21 @@ namespace NoQuestsWithoutComms
                     }
                 }
 
+                if (!tmpResult && PatchMain.hasMedievalOverhaul) {
+                    for (int i = 0; i < maps.Count && !tmpResult; i++) {
+                        foreach (Building building in maps[i].listerBuildings.AllBuildingsColonistOfDef(ThingDef.Named("DankPyon_ScribeTable"))) {
+                            if(building.Faction == Faction.OfPlayer) {
+                                CompPowerTrader compPowerTrader = building.TryGetComp<CompPowerTrader>();
+                                if (compPowerTrader == null || compPowerTrader.PowerOn) {
+                                    D.Debug("Player has working Scribe Table");
+                                    tmpResult = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 PatchMain.lastCheckComms = DateTime.Now;
                 if (tmpResult) {
                     __result = tmpResult;
