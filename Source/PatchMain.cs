@@ -1,6 +1,7 @@
 ﻿using Verse;
 using HarmonyLib;
 using System.Reflection;
+using System.Collections.Generic;
 using System.Linq;
 using System;
 
@@ -15,6 +16,18 @@ namespace NoQuestsWithoutComms {
 		static public DateTime lastCheckComms = DateTime.Now;
 		static public bool cachedResult = false;
 
+		static public List<string> allowedQuestsAndIncidents = new List<string>() { 
+			"Beggars",
+			"Hospitality_Refugee",
+			"Intro_Wimp", 
+			"Intro_Deserter",
+			"RefugeePodCrash_Baby",
+			"RefugeePodCrash",
+			"ReliquaryPilgrims",
+			"WandererJoins",
+			"WandererJoinAbasia",
+		};
+
 		static PatchMain() {
 
 			hasTribalSignalfire = ModsConfig.ActiveModsInLoadOrder.Any(m => m.Name == "Tribal Signal Fire (Continued)" || m.PackageId == "Mlie.TribalSignalFire");
@@ -26,6 +39,13 @@ namespace NoQuestsWithoutComms {
 			D.Debug("hasNopowerCommsSimplified = " + hasNopowerCommsSimplified);
 			D.Debug("hasIndustrialAge = " + hasIndustrialAge);
 			D.Debug("hasMedievalOverhaul = " + hasMedievalOverhaul);
+
+			if (NQWCMod.settings.allowLocalIncidents) { 
+				D.Debug("Local Incidents Allowed:");
+				foreach(string s in allowedQuestsAndIncidents) { 
+					D.Debug("		" + s, true);
+				}
+			}
 
 			var harmony = new Harmony("eBae.NoQuestsWithoutComms");
 			var assembly = Assembly.GetExecutingAssembly();

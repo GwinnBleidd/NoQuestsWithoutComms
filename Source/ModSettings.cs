@@ -5,13 +5,13 @@ namespace NoQuestsWithoutComms
 {
     public class NQWCSettings : ModSettings
     {
-        public bool allowVFEMTournaments;
+        public bool allowLocalIncidents;
         public bool allowDebugOutput;
 
         public override void ExposeData()
         {
-            Scribe_Values.Look(ref allowVFEMTournaments, "allowVFEMTournaments");
-            Scribe_Values.Look(ref allowDebugOutput, "allowDebugOutput");
+            Scribe_Values.Look(ref allowLocalIncidents, "allowLocalIncidents", true);
+            Scribe_Values.Look(ref allowDebugOutput, "allowDebugOutput", false);
             base.ExposeData();
         }
     }
@@ -29,7 +29,7 @@ namespace NoQuestsWithoutComms
         {
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(inRect);
-            listingStandard.CheckboxLabeled("allowVFEMTournamentsExplanation".Translate(), ref settings.allowVFEMTournaments);
+            listingStandard.CheckboxLabeled("Allow Local Incidents", ref settings.allowLocalIncidents, "When on, local incidents ");
             listingStandard.CheckboxLabeled("Allow Debug Output", ref settings.allowDebugOutput);
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);

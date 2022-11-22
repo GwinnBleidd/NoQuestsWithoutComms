@@ -9,14 +9,18 @@ namespace NoQuestsWithoutComms {
 			Log.Message(line);
 		}
 
-		public static void Debug(string title) {
+		public static void Debug(string title, bool suppressModSignature = false) {
 			if (NQWCMod.settings.allowDebugOutput) {
-				D.Text("NoQuestsWithoutComms: " + title, 0);
+				if (suppressModSignature) { 
+					D.Text(title, 0);
+				} else { 
+					D.Text("NoQuestsWithoutComms: " + title, 0);
+				}
 			}
 		}
 
 		public static void Verbose(string title) {
-		    D.Text("NoQuestsWithoutComms: " + title, 0);
+			D.Text("NoQuestsWithoutComms: " + title, 0);
 		}
 	}
 }
